@@ -1,8 +1,8 @@
-from flask import Flask, request, Response #flask를 import한다. 
+from flask import Flask, request, Response, render_template #flask를 import한다. 
                 #Flask를 import했다는 것은 웹서버 객체를 쓴다는 말.
                 #Request를 import했다는 것은 클라이언트가 서버에 보낸 Request 관련 모든 정보를 담고 있다. (URL, header, 파라미터, JSON, form 등 모든 입력데이터 read)
                 #Response를 import 했다는 것은 -> 응답의 MIME 타입, 상태 코드, 스트리밍까지 직접 제어하려는 API 적인 성격 (문자열처럼 단순 Return으로 끝나는 게 아니라) 
-
+                ## render_template를 import 했다는 것은: template 폴더 안의 html을 쓰겠다는 말!
 
 import os # 파이썬이 운영체제와 상호작용할 수 있게 해주는 표준 라이브러리를 import 해온다. 여기서는 운영체제 설정 언어 정보를 받아오는 데 사용됨.
 from io import BytesIO #io 라이브러리에서 "바이트 버퍼"를 가져오는데, 이를 활용하면 디스크에 저장을 하지 않고 음성/이미지 등의 바이너리 데이터를 RAM 상에서 바로 클라이언트로
@@ -12,7 +12,6 @@ from gtts import gTTS #Google Translate의 Text-To-Speech 엔진으로 목소리
 DEFAULT_LANG=os.getenv('DEFAULT_LANG','ko') #이것 때문에 os를 import한 것으로 보임. os.getenv는 운영체제의 환경 변수를 얻어온다. 
                                             # "DEFAULT_LANG" -> 운영체제에서 설정해 놓은 언어값을 가져오는 것. 설정이 되어 있지 않다면 'ko'(한국어로 설정된다는 이야기.)
 app = Flask(__name__)  # app이라는 Flask instance를 생성한다. 이 app이라는 instance의 기본 환경은 현재 실행중인 모듈의 이름(__name__)을 기준으로 설정된다.
-
 
 @app.route("/") # Root page (http://0.0.0.0/5000/ )으로 들어갔을 때 home()을 실행한다. @app.route('/') >Flask에게 home() 함수를 ' '안의 URL과 매핑해달라고 요청하는것.
                 # "/"부분이 바뀌게 된다면, 예를 들어 @app.route("/speak") 등과 같이 설정되면 http://0.0.0.0/5000/speak에서 home()을 실행하게 되는 것이다.
@@ -34,6 +33,11 @@ def home ():
                                                           # mimetype='audio/mpeg' -> fp안에서 꺼낸 데이터가 오디오/mpeg으로 압축된 (->mp3) 파일이라는 것을 알려줌.
                                                           # 브라우저는 mimetype 이하 형식을 보고 미디어 플레이어를 띄우거나 다운로드 창을 띄울 지 결정한다.
                                                           # Response 대신: send_file(fp, mimetype='audio/mpeg')을 쓰면 Flask가 알아서 파일 스트리밍을 처리한다.
+
+@app.route("/menu")
+def menu():
+    return render_template("menu.html")
+
 
 if __name__ == '__main__': #해당 script가 자체적으로 실행된 거라면 (호출등으로 실행된 경우의 __name__ = app.py)
     app.run('0.0.0.0', 5000) #0.0.0.0 (모든 주소), 포트 5000으로 서버를 열어준다.
