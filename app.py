@@ -13,7 +13,6 @@ DEFAULT_LANG=os.getenv('DEFAULT_LANG','ko') #이것 때문에 os를 import한 �
                                             # "DEFAULT_LANG" -> 운영체제에서 설정해 놓은 언어값을 가져오는 것. 설정이 되어 있지 않다면 'ko'(한국어로 설정된다는 이야기.)
 app = Flask(__name__)  # app이라는 Flask instance를 생성한다. 이 app이라는 instance의 기본 환경은 현재 실행중인 모듈의 이름(__name__)을 기준으로 설정된다.
 
-
 @app.route("/") # Root page (http://0.0.0.0/5000/ )으로 들어갔을 때 home()을 실행한다. @app.route('/') >Flask에게 home() 함수를 ' '안의 URL과 매핑해달라고 요청하는것.
                 # "/"부분이 바뀌게 된다면, 예를 들어 @app.route("/speak") 등과 같이 설정되면 http://0.0.0.0/5000/speak에서 home()을 실행하게 되는 것이다.
 def home ():
