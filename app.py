@@ -3,7 +3,7 @@ from flask import Flask, request, Response, render_template #flask를 import한�
                 #Request를 import했다는 것은 클라이언트가 서버에 보낸 Request 관련 모든 정보를 담고 있다. (URL, header, 파라미터, JSON, form 등 모든 입력데이터 read)
                 #Response를 import 했다는 것은 -> 응답의 MIME 타입, 상태 코드, 스트리밍까지 직접 제어하려는 API 적인 성격 (문자열처럼 단순 Return으로 끝나는 게 아니라) 
                 ## render_template를 import 했다는 것은: template 폴더 안의 html을 쓰겠다는 말!
-
+import socket
 import os # 파이썬이 운영체제와 상호작용할 수 있게 해주는 표준 라이브러리를 import 해온다. 여기서는 운영체제 설정 언어 정보를 받아오는 데 사용됨.
 from io import BytesIO #io 라이브러리에서 "바이트 버퍼"를 가져오는데, 이를 활용하면 디스크에 저장을 하지 않고 음성/이미지 등의 바이너리 데이터를 RAM 상에서 바로 클라이언트로
                        #전송해준다. 디스크에 파일을 저장하고 불러오는 과정이 생략되니까 속도가 빠르고 깨끗함!
@@ -36,11 +36,15 @@ def home ():
 
 @app.route("/menu")
 def menu():
-    return render_template("menu.html")
+    if app.debug: #debug 모드로 실행 중일 때는!
+        hostname='컴퓨터(인스턴스):'+socket.gethostname() #hostname에는 flask 서버를 실행중인 머신의 host 이름이 들어간다.
+    else:    # debug 모드가 아닐 때는!
+        hostname=""  #그냥 빈 문자열을 전달한다
+    return render_template("menu.html", computername=hostname) #이제 menu.html을 호출할 떄 menu.html 내에서 computername 변수 사용 가능하다.
 
 
 if __name__ == '__main__': #해당 script가 자체적으로 실행된 거라면 (호출등으로 실행된 경우의 __name__ = app.py)
-    app.run('0.0.0.0', 5000) #0.0.0.0 (모든 주소), 포트 5000으로 서버를 열어준다.
+    app.run('0.0.0.0', 5000, debug = True) #0.0.0.0 (모든 주소), 포트 5000으로 서버를 열어준다.
 
 
 ## fp.getvalue로 바이너리를 직접 보내기 때문에, mimetype 값이 달라지면 깨진 문자나 노이즈 등이 출력되거나 에러가 나온다. (바이너리를 어떻게 읽을 건지 헤더로서 기능)
