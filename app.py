@@ -44,7 +44,7 @@ def menu():
 
 @app.route("/test2")
 def test2():
-    return render_template('test2.html')
+  return render_template('test2.html')
 
 if __name__ == '__main__': #해당 script가 자체적으로 실행된 거라면 (호출등으로 실행된 경우의 __name__ = app.py)
     app.run('0.0.0.0', 5000, debug = True) #0.0.0.0 (모든 주소), 포트 5000으로 서버를 열어준다.
